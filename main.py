@@ -2,6 +2,7 @@ import json
 import os
 import aiohttp
 import random
+import asyncio
 from pathlib import Path
 
 from astrbot.api.event import filter, AstrMessageEvent
@@ -200,7 +201,9 @@ class MyPlugin(Star):
             if str(user_id) == str(self_id):
                 logger.debug(f"Bot self joined group {group_id}, skipping welcome message")
                 return
-
+            # 延迟1.5s，等待 QQ 服务器同步新成员信息，避免astrbot解析Comp.at超时
+            await asyncio.sleep(1.5)
+            
             welcome_message = self.welcome_text
             group_image = None
 
